@@ -19,14 +19,35 @@ USE sql_hemoglobin;
 -- description, chromosome location and strand.
 -- =========================================================
 
-CREATE TABLE GEN (
-    id_gen INT PRIMARY KEY AUTO_INCREMENT,
-    name_gen VARCHAR(50) NOT NULL UNIQUE,
+CREATE TABLE GENE (
+    gene_id INT PRIMARY KEY AUTO_INCREMENT,
+    gene_name VARCHAR(50) NOT NULL UNIQUE,
     descrip TEXT NOT NULL,
     chrm VARCHAR(10) NOT NULL,
-    pos_in INT UNSIGNED NOT NULL,
-    pos_fin INT UNSIGNED NOT NULL,
+    start_pos INT UNSIGNED NOT NULL,
+    end_pos INT UNSIGNED NOT NULL,
     strand ENUM('+','-') DEFAULT '+',
-    CHECK (pos_fin >= pos_in)
+    CHECK (end_pos >= start_pos)
+);
+
+
+-- ---------------------------------------------------------
+-- Table: GENE_SEQUENCE
+-- Stores DNA sequence fragments associated with a gene, 
+-- including type (exon, intron, promoter, etc.) and the 
+-- relative start position within the gene.
+-- ---------------------------------------------------------
+
+CREATE TABLE GENE_SEQUENCE (
+    sequence_id INT PRIMARY KEY AUTO_INCREMENT,
+    gene_id INT NOT NULL,
+    dna_sequence VARCHAR(1000) NOT NULL,
+    sequence_type ENUM('exon','intron','promoter','CDS','UTR','other') NOT NULL DEFAULT 'other',
+    relative_start INT UNSIGNED NOT NULL,
+    CHECK (CHAR_LENGTH(dna_sequence) BETWEEN 10 AND 1000),
+    CHECK (relative_start > 0),
+    FOREIGN KEY (gene_id) REFERENCES GENE(gene_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
 );
 
