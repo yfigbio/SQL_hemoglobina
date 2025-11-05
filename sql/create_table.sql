@@ -51,3 +51,24 @@ CREATE TABLE GENE_SEQUENCE (
         ON UPDATE CASCADE
 );
 
+-- ---------------------------------------------------------
+-- Table: GENE_VARIANT
+-- Stores genetic variants associated with a gene, including
+-- the reference and alternative allele, the variant type,
+-- and the relative position within the gene.
+-- ---------------------------------------------------------
+
+CREATE TABLE GENE_VARIANT (
+    variant_id INT PRIMARY KEY AUTO_INCREMENT,
+    gene_id INT NOT NULL,  -- FOREING KEY 
+    relative_start INT UNSIGNED NOT NULL,
+    ref_allele CHAR(1) NOT NULL, -- With constraint
+    alt_allele CHAR(1) NOT NULL, -- With constraint
+    variant_type ENUM('SNV','insertion','deletion','substitution','other') NOT NULL,
+    CHECK (relative_start > 0),
+    CHECK (ref_allele IN('A','C','T','G','-')),
+    CHECK (alt_allele IN('A','C','T','G','-')),
+    FOREIGN KEY (gene_id) REFERENCES GENE (gene_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
