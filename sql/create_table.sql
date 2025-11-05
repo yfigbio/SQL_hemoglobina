@@ -100,3 +100,24 @@ CREATE TABLE GENE_ANNOTATION (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+
+-- ---------------------------------------------------------
+-- Table: STUDY
+-- Stores information about scientific studies related to 
+-- genes and variants, including title, authors, journal, 
+-- publication date, study type and optional reference code.
+-- ---------------------------------------------------------
+
+CREATE TABLE STUDY (
+    study_id INT PRIMARY KEY AUTO_INCREMENT,
+    title VARCHAR(255) NOT NULL,
+    authors VARCHAR(255) NOT NULL,
+    journal VARCHAR(100) NOT NULL,
+    publication_date DATE NOT NULL,
+    study_type ENUM('clinical','research','review','meta-analysis','other') NOT NULL,
+    reference_code VARCHAR(20),
+    CHECK (TRIM(title) <> ''),
+    CHECK (TRIM(authors) <> ''),
+    CHECK (TRIM(journal) <> '')
+);
