@@ -72,3 +72,31 @@ CREATE TABLE GENE_VARIANT (
         ON DELETE CASCADE
         ON UPDATE CASCADE
 );
+
+-- ---------------------------------------------------------
+-- Table: GENE_ANNOTATION
+-- Stores annotations related to a gene, including annotation
+-- type (functional, clinical, expression, etc.), description,
+-- source of information, evidence level and creation timestamp.
+-- ---------------------------------------------------------
+
+-- ---------------------------------------------------------
+-- Table: GENE_ANNOTATION
+-- Stores annotations related to a gene, including annotation
+-- type (functional, clinical, expression, etc.), description,
+-- source of information, evidence level and creation timestamp.
+-- ---------------------------------------------------------
+
+CREATE TABLE GENE_ANNOTATION (
+    annotation_id INT PRIMARY KEY AUTO_INCREMENT,
+    gene_id INT NOT NULL,
+    annotation_type ENUM('functional','clinical','expression','pathway','other') NOT NULL,
+    description TEXT NOT NULL,
+    source ENUM('Ensembl','ClinVar','OMIM','UniProt','NCBI','Other'),
+    evidence_level ENUM('high','moderate','low','unknown'),
+    created_at DATETIME NOT NULL,
+    CHECK (TRIM(description) <> ''),
+    FOREIGN KEY (gene_id) REFERENCES GENE(gene_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
